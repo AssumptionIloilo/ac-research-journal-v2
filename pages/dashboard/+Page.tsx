@@ -1,5 +1,5 @@
 import getTitle from "@/utils/get-title";
-import { useMetadata } from "vike-metadata-solid";
+import { useMetadata } from "vike-metadata-react";
 
 export default function Page() {
   useMetadata({

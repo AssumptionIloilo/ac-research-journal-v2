@@ -1,13 +1,13 @@
 import getTitle from "@/utils/get-title";
-import { createSignal, type FlowProps } from "solid-js";
-import { useMetadata } from "vike-metadata-solid";
+import { useState, type PropsWithChildren } from "react";
+import { useMetadata } from "vike-metadata-react";
 
 useMetadata.setGlobalDefaults({
   title: getTitle("Home"),
   description: "Demo showcasing Vike and Solid.",
 });
 
-export default function RootLayout(props: FlowProps) {
+export default function RootLayout(props: PropsWithChildren) {
   return (
     <>
       <div>
@@ -25,11 +25,11 @@ export default function RootLayout(props: FlowProps) {
 }
 
 function Counter() {
-  const [count, setCount] = createSignal(0);
+  const [count, setCount] = useState(0);
 
   return (
     <button type="button" onClick={() => setCount((count) => count + 1)}>
-      Root Counter {count()}
+      Root Counter {count}
     </button>
   );
 }

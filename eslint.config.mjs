@@ -1,6 +1,6 @@
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import solid from "eslint-plugin-solid/configs/recommended";
+import react from "eslint-plugin-react";
 import globals from "globals";
 
 export default [
@@ -9,11 +9,11 @@ export default [
   },
   {
     files: ["**/*.{ts,tsx}"],
-    ...solid,
   },
   {
     plugins: {
       "@typescript-eslint": typescriptEslint,
+      react,
     },
     languageOptions: {
       parser: tsParser,

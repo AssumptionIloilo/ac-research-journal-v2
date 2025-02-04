@@ -1,6 +1,6 @@
 import getTitle from "@/utils/get-title";
-import { createSignal } from "solid-js";
-import { useMetadata } from "vike-metadata-solid";
+import { useState } from "react";
+import { useMetadata } from "vike-metadata-react";
 
 export default function Page() {
   useMetadata({
@@ -24,11 +24,11 @@ export default function Page() {
 }
 
 function Counter() {
-  const [count, setCount] = createSignal(0);
+  const [count, setCount] = useState(0);
 
   return (
     <button type="button" onClick={() => setCount((count) => count + 1)}>
-      Counter {count()}
+      Counter {count}
     </button>
   );
 }

@@ -1,6 +1,6 @@
-import { createSignal, type FlowProps } from "solid-js";
+import { PropsWithChildren, useState } from "react";
 
-export default function DashboardLayout(props: FlowProps) {
+export default function DashboardLayout(props: PropsWithChildren) {
   return (
     <div>
       <aside>
@@ -10,17 +10,17 @@ export default function DashboardLayout(props: FlowProps) {
         <span>{" | "}</span>
         <Counter />
       </aside>
-      {props.children}
+      {props?.children}
     </div>
   );
 }
 
 function Counter() {
-  const [count, setCount] = createSignal(0);
+  const [count, setCount] = useState(0);
 
   return (
     <button type="button" onClick={() => setCount((count) => count + 1)}>
-      Dashboard Counter {count()}
+      Dashboard Counter {count}
     </button>
   );
 }

@@ -31,17 +31,17 @@ app.get("*", async (c, next) => {
     urlOriginal: c.req.url,
     request: c.req,
     response: c.res,
+    headersOriginal: c.req.raw.headers,
   };
   const pageContext = await renderPage(pageContextInit);
   const { httpResponse } = pageContext;
   if (!httpResponse) {
     return next();
   } else {
-    const { body, statusCode, headers } = httpResponse;
+    const { statusCode, headers } = httpResponse;
     headers.forEach(([name, value]) => c.header(name, value));
     c.status(statusCode);
-
-    return c.body(body);
+    return c.body(httpResponse.getReadableWebStream());
   }
 });
 
