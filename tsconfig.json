@@ -14,10 +14,11 @@
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     },
     "types": [
       "@types/bun", // Remove when Node
+      "vite-plugin-svgr/client",
       "react",
       "vite/client"
     ],

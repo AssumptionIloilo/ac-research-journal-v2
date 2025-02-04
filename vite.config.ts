@@ -5,6 +5,7 @@ import devServer from "@hono/vite-dev-server";
 import vike from "vike/plugin";
 
 // Vite
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,10 +14,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const root = resolve(__dirname, ".");
 
+// Icons
+import svgr from "vite-plugin-svgr";
+
 export default defineConfig({
   plugins: [
     devServer({
-      entry: "server.ts",
+      entry: "./src/server/server.ts",
 
       exclude: [
         /^\/@.+$/,
@@ -30,7 +34,9 @@ export default defineConfig({
 
       injectClientScript: false,
     }),
+    tailwindcss(),
     react(),
+    svgr(),
     vike({}),
   ],
   server: {
@@ -41,7 +47,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": resolve(root),
+      "@": resolve(root, "src"),
     },
   },
 });
