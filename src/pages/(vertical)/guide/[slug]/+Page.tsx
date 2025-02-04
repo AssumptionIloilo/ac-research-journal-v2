@@ -7,6 +7,8 @@
 
 import { cn } from "@/utils/cn";
 import { formatDate } from "@/utils/format-date";
+import getTitle from "@/utils/get-title";
+import { useMetadata } from "vike-metadata-react";
 import { usePageContext } from "vike-react/usePageContext";
 
 // =============================================================================
@@ -40,6 +42,10 @@ import { usePageContext } from "vike-react/usePageContext";
 // }
 
 export default function GuidelinesPage() {
+  useMetadata({
+    title: getTitle("Guidelines"),
+  });
+
   const { routeParams } = usePageContext();
 
   // const [{ data: guidelineData }] = useQuery({

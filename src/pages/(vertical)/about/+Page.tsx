@@ -3,12 +3,13 @@
 import useBackgroundColor from "@/hooks/use-background-color";
 import { container } from "@/styles/variants";
 import { cn } from "@/utils/cn";
+import getTitle from "@/utils/get-title";
 import { useMetadata } from "vike-metadata-react";
 import EditorialBoard from "./_components/editorial-board";
 
 export default function AboutPage() {
   useMetadata({
-    title: "About",
+    title: getTitle("About"),
   });
 
   useBackgroundColor({ color: "#E6E6FA", enableTransition: true });
