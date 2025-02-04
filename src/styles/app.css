@@ -1,4 +1,4 @@
-/* @import url("/fonts/satoshi.css"); */
+@import url("/fonts/satoshi.css");
 @import url("/fonts/mixoldgirl.css");
 
 @import "tailwindcss";
@@ -48,6 +48,9 @@
   --color-dark-800: #010125;
   --color-dark-900: #010119;
   --color-dark-1000: #00010f;
+
+  --font-satoshi: "Satoshi";
+  --font-mixOldGirl: "Mix Old Girl", cursive;
 }
 
 /** ASTHER OVERRIDES IDK */
