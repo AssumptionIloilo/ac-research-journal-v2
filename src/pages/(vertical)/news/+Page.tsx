@@ -15,11 +15,17 @@ import { container } from "@/styles/variants";
 import { cn } from "@/utils/cn";
 import { extractTextFromContent } from "@/utils/extract-text-from-content";
 import { formatDate } from "@/utils/format-date";
+import getTitle from "@/utils/get-title";
 import qs from "querystring";
+import { useMetadata } from "vike-metadata-react";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
 
 export default function NewsOverviewPage() {
+  useMetadata({
+    title: getTitle("News"),
+  });
+
   /** For searchParams (server-side compatible in Next.JS) */
   const { urlParsed } = usePageContext();
 

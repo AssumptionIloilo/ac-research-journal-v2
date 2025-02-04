@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "bunx --bun vite --host",
+    "dev-s": "vite",
     "build": "vite build",
     "preview": "NODE_ENV=production bun run ./server.ts",
     "preview-static": "vite preview",
