@@ -79,11 +79,13 @@ export default function NewsPage() {
   return (
     <div className={container({ class: "pt-10 pb-20 gap-y-12" })}>
       <header className="flex flex-col gap-y-8">
-        <h1 className="font-bold text-2xl max-w-lg mx-auto text-center">{newsArticle?.title}</h1>
+        <h1 className="font-bold text-2xl max-w-lg mx-auto text-center">
+          {newsArticle?.title} {JSON.stringify(routeParams)}
+        </h1>
         <div className="flex gap-x-2 justify-center">
           <div className="relative w-10 h-10">
             <img
-              src={newsArticle?.author?.avatarImage?.url ?? ""}
+              src={newsArticle?.author?.avatarImage?.url}
               alt={newsArticle?.author?.name ?? "author profile"}
               width={40}
               height={40}
@@ -107,8 +109,8 @@ export default function NewsPage() {
           }}
         >
           <img
-            alt={newsArticle?.featureImage?.alt ?? ""}
-            src={newsArticle?.featureImage?.url ?? ""}
+            alt={newsArticle?.featureImage?.alt}
+            src={newsArticle?.featureImage?.url}
             className="object-cover"
           />
         </div>

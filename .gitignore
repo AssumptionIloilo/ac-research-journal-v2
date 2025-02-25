@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 .env
+
+pocketbase_0.25.0_darwin_arm64

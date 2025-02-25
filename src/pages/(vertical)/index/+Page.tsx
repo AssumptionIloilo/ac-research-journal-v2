@@ -106,7 +106,7 @@ export default function Home(_props: PropsWithChildren) {
           <div className="relative w-44 bg-primary-100">
             <img
               className="w-full h-full"
-              src={featuredArchive.archiveCover?.url ?? ""}
+              src={featuredArchive.archiveCover?.url}
               alt={featuredArchive.archiveCover?.alt ?? ""}
             />
           </div>
@@ -158,8 +158,8 @@ export default function Home(_props: PropsWithChildren) {
                 {/* Featured News Card: Background Image */}
                 <div className="absolute inset-0">
                   <img
-                    src={featuredNews?.featureImage?.url ?? ""}
-                    alt={featuredNews?.featureImage?.alt ?? ""}
+                    src={featuredNews?.featureImage?.url}
+                    alt={featuredNews?.featureImage?.alt}
                     className="object-cover bg-secondary-300 w-full h-full"
                   />
                 </div>

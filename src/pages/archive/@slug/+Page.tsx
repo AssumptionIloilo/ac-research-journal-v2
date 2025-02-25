@@ -26,6 +26,7 @@ import { useMetadata } from "vike-metadata-react";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
 
+/** @vite-ignore */
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
   // @ts-ignore
@@ -53,6 +54,33 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 // =============================================================================
 // Archive Page (For Querying & Hydrating)
 // =============================================================================
+// export default function ArchivePage() {
+//   const { routeParams } = usePageContext();
+
+//   useMetadata({
+//     title: getTitle("Archive <SLUG>"),
+//   });
+
+//   // const [{ data }] = useQuery({
+//   //   query: GetArchiveBySlugDocument,
+//   //   variables: {
+//   //     slug,
+//   //   },
+//   // });
+//   const data: any = null;
+
+//   const volume = data?.Archives?.docs?.at(0);
+
+//   return <ArchivePageComponent volume={volume} />;
+// }
+
+// // =============================================================================
+// // ArchivePageComponent (For Rendering Data)
+// // =============================================================================
+// type ArchivePageComponentProps = {
+//   volume?: any;
+// };
+
 export default function ArchivePage() {
   const { routeParams } = usePageContext();
 
@@ -69,19 +97,6 @@ export default function ArchivePage() {
   const data: any = null;
 
   const volume = data?.Archives?.docs?.at(0);
-
-  return <ArchivePageComponent volume={volume} />;
-}
-
-// =============================================================================
-// ArchivePageComponent (For Rendering Data)
-// =============================================================================
-type ArchivePageComponentProps = {
-  volume?: any;
-};
-
-const ArchivePageComponent: FC<ArchivePageComponentProps> = (props) => {
-  const { volume } = props;
 
   // =============================================================================
   // States
@@ -400,7 +415,7 @@ const ArchivePageComponent: FC<ArchivePageComponentProps> = (props) => {
       )}
     </div>
   );
-};
+}
 
 // =============================================================================
 // Subcomponent: (Flipbook)
@@ -460,7 +475,7 @@ const FlipBook: FC<FlipBookType> = memo((props) => {
 
       return (
         <div className="w-full h-full bg-gray-50" key={`${pageNumber}`}>
-          <Page pageNumber={pageNumber + 1} height={height} width={width} />
+          <Page key={pageNumber} pageNumber={pageNumber + 1} height={height} width={width} />
         </div>
       );
     });
