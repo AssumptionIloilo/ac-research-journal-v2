@@ -93,6 +93,7 @@ const GuideLayout: FC<GuideLayoutProps> = (props) => {
         )}
         {guidelinesData?.Guidelines?.docs?.map((guideline: any) => (
           <a
+            key={guideline.slug}
             onClick={handleClose}
             href={`${pageRoutes.guide}/${guideline?.slug}`}
             className="select-none relative py-3 px-2"

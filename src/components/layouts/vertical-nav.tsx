@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 import { navLinks, pageRoutes } from "@/constants/page-routes";
 import useIsOnTop from "@/hooks/use-is-on-top";
@@ -62,7 +62,7 @@ const VerticalNav: FC<VerticalNavProps> = (props) => {
 
         <ul className="hidden gap-4 md:flex md:justify-center md:gap-x-12 md:bg-transparent md:absolute md:top-[50%] md:left-[50%] md:translate-x-[-50%] md:translate-y-[-50%]">
           {navLinks.map((navLink) => {
-            if (navLink.desktop === false) return null;
+            if (navLink.desktop === false) return <Fragment key={navLink.url}></Fragment>;
 
             return (
               <a
