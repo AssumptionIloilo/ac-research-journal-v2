@@ -20,6 +20,9 @@ const News: CollectionConfig = {
         href: '/news',
       }),
     },
+    livePreview: {
+      url: ({ data }) => `http://localhost:3000/news/${data.slug}`,
+    },
   },
   access: {
     read: () => true,
@@ -97,7 +100,7 @@ const News: CollectionConfig = {
         readOnly: true,
         position: 'sidebar',
         description: (t) =>
-          `It will take ${JSON.stringify(t)} this many minutes to read based on the average reading speed.`,
+          `It will take this many minutes to read based on the average reading speed.`,
       },
     },
     {

@@ -1,5 +1,4 @@
-import type { FieldHook } from 'payload/types'
-
+import type { FieldHook } from 'payload'
 import { slugify } from './slugify'
 
 /** Format Slug is a Field Hook Callback. */
