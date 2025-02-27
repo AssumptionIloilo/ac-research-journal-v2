@@ -1,0 +1,16 @@
+.avatar-container {
+  display: flex;
+  column-gap: 12px;
+  text-decoration: none;
+  div {
+    width: 25px;
+    height: 25px;
+    border-radius: 999px;
+    padding: 0px;
+    background: var(--theme-elevation-400);
+  }
+}
+
+.app-header__account {
+  text-decoration: none;
+}

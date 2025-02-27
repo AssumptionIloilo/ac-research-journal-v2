@@ -1,0 +1,29 @@
+.admin-icon {
+  img {
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    object-fit: contain;
+  }
+  display: flex;
+  flex-direction: column;
+
+  > p {
+    text-decoration: none !important;
+    text-decoration-style: none !important;
+    text-emphasis-style: none;
+    color: #2e2fa5;
+    margin-bottom: 0;
+  }
+}
+
+// .nav__brand {
+//   text-decoration: none;
+// }
+// @media screen and (max-width: 1024px) {
+//   .admin-icon {
+//     flex-direction: row;
+//     align-items: center;
+//     column-gap: 10px;
+//   }
+// }

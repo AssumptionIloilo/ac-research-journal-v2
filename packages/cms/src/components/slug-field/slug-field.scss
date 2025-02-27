@@ -1,0 +1,31 @@
+.slug-field {
+  margin-bottom: 2rem !important;
+  .field-label {
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    button {
+      pointer-events: auto;
+      cursor: pointer;
+      font-size: 0.9rem;
+      // background-color: var(--theme-elevation-800);
+      // color: var(--theme-elevation-0);
+      padding: 0.2rem 0.5rem;
+      background: none;
+      color: var(--theme-elevation-800);
+      border: 1px solid var(--theme-elevation-800);
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: var(--theme-elevation-100);
+      // color: var(--theme-elevation-0);
+    }
+    button:focus {
+      box-shadow: 0 0 0 2px var(--theme-success-500);
+    }
+    button:active {
+      background: var(--theme-elevation-700);
+    }
+  }
+}
