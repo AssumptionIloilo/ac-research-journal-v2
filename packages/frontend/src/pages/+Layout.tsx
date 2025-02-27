@@ -5,10 +5,12 @@ import { useMetadata } from "vike-metadata-react";
 import { Toaster } from "react-hot-toast";
 
 import { client, ssrCache } from "@/lib/urql-client";
-import "@/styles/app.css";
-import "@/styles/nprogress.css";
 import { Provider as UrqlProvider } from "urql";
 import { useData } from "vike-react/useData";
+
+import "@/styles/app.css";
+import "@/styles/nprogress.css";
+import "@/styles/typography.css";
 
 useMetadata.setGlobalDefaults({
   title: getTitle("Home"),

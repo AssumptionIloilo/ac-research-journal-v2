@@ -1,7 +1,7 @@
 import { FC, memo, useCallback, useEffect, useId, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import HTMLFlipBook from "react-pageflip";
-import { Document, Page, pdfjs } from "react-pdf";
+import { Document, Page } from "react-pdf";
 import { OnDocumentLoadSuccess } from "react-pdf/dist/cjs/shared/types.js";
 import Select, { type SingleValue } from "react-select";
 // import { useQuery } from "urql";
@@ -10,7 +10,6 @@ import Select, { type SingleValue } from "react-select";
 // import { GetArchiveBySlugDocument, GetArchiveBySlugQuery } from "@/gql/graphql";
 // import { client, ssrCache } from "@/lib/urqlClient";
 
-import { pageRoutes } from "@/constants/page-routes";
 import { useMediaQueryClient } from "@/hooks/use-media-query";
 import useMounted from "@/hooks/use-mounted";
 import { useWindowWidth } from "@/hooks/use-window-width";
@@ -19,19 +18,18 @@ import { isInRange } from "@/utils/is-in-range";
 import { Icon } from "@iconify/react";
 import useArchiveWasPrevious from "../_hooks/use-archive-was-previous";
 
+import { RichText } from "@/components/rich-text";
+import { pageRoutes } from "@/constants/page-routes";
+import { onMount } from "@/hooks/on-mount";
+import { GetArchiveBySlugDocument } from "@/queries/archive";
 import getTitle from "@/utils/get-title";
+import { mediaUrl } from "@/utils/media-url";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
+import { useQuery } from "urql";
 import { useMetadata } from "vike-metadata-react";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
-
-/** @vite-ignore */
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.js",
-  // @ts-ignore
-  import.meta.url
-).toString();
 
 // =============================================================================
 // Server-Side Calls from the Page.
@@ -84,20 +82,34 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 export default function ArchivePage() {
   const { routeParams } = usePageContext();
 
-  useMetadata({
-    title: getTitle("Archive <SLUG>"),
+  onMount(async () => {
+    const { pdfjs } = await import("react-pdf");
+
+    // How I got this: I needed to set the workerSrc to pdf.worker.min.js.
+    // If we don't we get an error of something not initialized.
+    //
+    // If the version changes (i.e. you updated react-pdf), you will also get an
+    // error of version mismatch. I just used npmjs.com to check the version first.
+    // Then explore the "Code", then found the pdf.worker.min.js file, then used that
+    // path on esm.sh so it can resolve via CDN.
+    //
+    // More info: https://stackoverflow.com/a/74285197/8622733
+    pdfjs.GlobalWorkerOptions.workerSrc =
+      "https://esm.sh/pdfjs-dist@4.8.69/build/pdf.worker.min.js";
   });
 
-  // const [{ data }] = useQuery({
-  //   query: GetArchiveBySlugDocument,
-  //   variables: {
-  //     slug,
-  //   },
-  // });
-  const data: any = null;
+  const [{ data }] = useQuery({
+    query: GetArchiveBySlugDocument,
+    variables: {
+      slug: routeParams.slug,
+    },
+  });
 
   const volume = data?.Archives?.docs?.at(0);
 
+  useMetadata({
+    title: getTitle(volume?.title),
+  });
   // =============================================================================
   // States
   // =============================================================================
@@ -266,23 +278,28 @@ export default function ArchivePage() {
   }, [executeAutofit, isMobile]);
 
   return (
-    <div className="flex-1 flex flex-col py-16 bg-[EDF1FD] overflow-x-hidden">
+    <div className="flex-1 flex flex-col py-16 bg-[EDF1FD] overflow-x-hidden gap-y-2">
       <div className="px-9 flex flex-col">
         {/* Back Button */}
         <a
           href={pageRoutes.archive}
           className="self-start"
           onClick={(e) => {
-            // 👇 Prevents opening the link on click (middle-click will work)
-            // Which is what we want.
-            e.preventDefault();
-
-            // 👇 We instead want to `replace` the route. Since Link `pushes` by
-            // default.
-            navigate(pageRoutes.archive, { overwriteLastHistoryEntry: true });
-
-            if (archiveWasPrevious) window.history.back(); // replace and back.
-            removeArchiveWasPrevious();
+            e.stopPropagation(); // Stop other onClicks from intercepting
+            e.preventDefault(); // Stop default <a> from redirecting.
+            if (document.startViewTransition)
+              document.startViewTransition(async () => {
+                const promise = navigate(pageRoutes.archive);
+                await promise;
+              });
+            // // 👇 Prevents opening the link on click (middle-click will work)
+            // // Which is what we want.
+            // e.preventDefault();
+            // // 👇 We instead want to `replace` the route. Since Link `pushes` by
+            // // default.
+            // navigate(pageRoutes.archive, { overwriteLastHistoryEntry: true });
+            // if (archiveWasPrevious) window.history.back(); // replace and back.
+            // removeArchiveWasPrevious();
           }}
         >
           <Icon icon="uil:arrow-up" className="text-primary-500 -rotate-90" fontSize={40} />
@@ -290,23 +307,33 @@ export default function ArchivePage() {
 
         {/* Header */}
 
-        <h1 className="text-primary-500 text-3xl pt-8 pb-5 font-semibold">{volume?.title}</h1>
+        <div className="pt-8 pb-5 flex">
+          <h1
+            className="text-primary-500 text-3xl font-semibold"
+            style={{ viewTransitionName: `voltitle-${volume?.id}` }}
+          >
+            {volume?.title}
+          </h1>
+        </div>
 
         <section className="flex gap-x-10 flex-col gap-y-10 md:flex-row">
           {/* Header Volume Cover */}
-          <div className="relative rounded-lg overflow-hidden bg-white aspect-[9/13] flex-shrink-0 w-60 shadow border">
+          <div className="relative rounded-lg overflow-hidden bg-white aspect-[9/13] h-max w-60 shadow border shrink-0">
             <img
-              src={volume?.archiveCover?.url ?? ""}
+              src={mediaUrl(volume?.archiveCover?.url)}
               className="object-cover object-center w-full h-full"
+              style={{ viewTransitionName: `volimg-${volume?.id}` }}
             />
           </div>
 
           {/* Header Details */}
           <div className="flex flex-col gap-y-5">
             <h2 className="font-semibold text-2xl">About the Cover</h2>
-            {/* <RichText content={volume?.about} /> */}
+            <div>
+              <RichText data={volume?.about} />
+            </div>
             <a
-              href={encodeURIComponent(volume?.pdf?.url ?? "404") ?? "404"}
+              href={encodeURIComponent(mediaUrl(volume?.pdf?.url) ?? "404") ?? "404"}
               target="_blank"
               download={volume?.title}
               className={button({
@@ -318,7 +345,7 @@ export default function ArchivePage() {
                 e.preventDefault();
 
                 async function download() {
-                  const response = await fetch(volume?.pdf?.url ?? "");
+                  const response = await fetch(mediaUrl(volume?.pdf?.url) ?? "");
                   const blob = await response.blob();
 
                   const downloadLink = document.createElement("a");
@@ -396,11 +423,11 @@ export default function ArchivePage() {
         </div>
       </div>
 
-      <div className="h-16" />
+      <div className="h-12" />
 
       {/* Do not server render this. Heavy. */}
       {mounted && (
-        <Document file={volume?.pdf?.url} onLoadSuccess={handlePDFLoadSuccess}>
+        <Document file={mediaUrl(volume?.pdf?.url)} onLoadSuccess={handlePDFLoadSuccess}>
           <div className="relative bottom-40 flex flex-col items-center mx-auto justify-center py-40 pointer-events-none w-full overflow-hidden">
             <FlipBook
               currentPage={currentPage}

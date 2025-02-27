@@ -6,6 +6,12 @@ import { cn } from "@/utils/cn";
 import { Icon } from "@iconify/react";
 import { usePageContext } from "vike-react/usePageContext";
 
+export const VERTICAL_MOBILE_FOOTER_HEIGHT = 92;
+
+export function VerticalMobileFooterOffset(props: { className?: string }) {
+  return <div className={props.className} style={{ height: VERTICAL_MOBILE_FOOTER_HEIGHT }} />;
+}
+
 type VerticalMobileFooterProps = {};
 
 /** This is the mobile navigation placed on the footer. */
@@ -13,7 +19,10 @@ const VerticalMobileFooter: FC<VerticalMobileFooterProps> = (_props) => {
   const { urlPathname: pathname } = usePageContext();
 
   return (
-    <nav className="relative top-0 left-0 right-0 z-[999998] w-full md:hidden">
+    <nav
+      className="relative top-0 left-0 right-0 z-[999998] w-full md:hidden"
+      style={{ height: VERTICAL_MOBILE_FOOTER_HEIGHT }}
+    >
       <div className="relative max-w-7xl w-full mx-auto flex items-center justify-between md:hidden">
         <ul className="fixed bottom-0 bg-white w-full justify-evenly items-center flex border-t border-primary-400">
           {navLinks.map((navLink) => (

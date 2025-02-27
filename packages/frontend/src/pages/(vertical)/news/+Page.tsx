@@ -152,12 +152,10 @@ export default function NewsOverviewPage() {
 
       {newsToDisplay?.bigCard && (
         <FeaturedNewsCard
+          id={newsToDisplay?.bigCard?.id}
           loading={mainNewsQuery?.fetching || newsTagsQuery?.fetching}
           href={`${pageRoutes.news}/${newsToDisplay?.bigCard?.slug}`}
-          contentString={extractTextFromContent(newsToDisplay?.bigCard?.content)
-            .join(" ")
-            .slice(0, 250)
-            .trim()}
+          contentString={extractTextFromContent(newsToDisplay?.bigCard?.content).trim()}
           publishedDate={newsToDisplay?.bigCard?.publishedDate ?? newsToDisplay?.bigCard?.createdAt}
           image={{
             url: newsToDisplay?.bigCard?.featureImage?.url,
@@ -243,6 +241,7 @@ export default function NewsOverviewPage() {
         {newsToDisplay?.otherStories?.map((newsItem: any) => (
           <NewsCard
             key={newsItem?.id}
+            id={newsItem?.id}
             title={newsItem?.title ?? ""}
             image={{
               url: newsItem?.featureImage?.url ?? "",
@@ -301,6 +300,7 @@ export default function NewsOverviewPage() {
 // Subcomponent (Featured News)
 // =========================
 type FeaturedNewsCardType = {
+  id: string;
   loading?: boolean;
   title?: string;
   href: string;
@@ -335,6 +335,16 @@ const FeaturedNewsCard: FC<FeaturedNewsCardType> = (props) => {
         href={href}
         className="relative block h-[25rem] w-full object-cover overflow-hidden rounded-md bg-primary-50"
         {...hoverProps}
+        onClick={(e) => {
+          e.stopPropagation(); // Stop other onClicks from intercepting
+          e.preventDefault(); // Stop default <a> from redirecting.
+          if (document.startViewTransition)
+            document.startViewTransition(async () => {
+              const promise = navigate(href);
+              await promise;
+            });
+        }}
+        // style={{ viewTransitionName: `newsimg-${id}` }}
       >
         {loading ? (
           <div className="inset-0 absolute bg-primary-100" />
@@ -367,9 +377,8 @@ const FeaturedNewsCard: FC<FeaturedNewsCardType> = (props) => {
           {loading ? (
             "Loading..."
           ) : (
-            <p className="text-dark-400 group-hover:text-primary-200 transition">
+            <p className="text-dark-400 group-hover:text-primary-200 transition line-clamp-4">
               {contentString}
-              ...
             </p>
           )}
           <div className="h-8" />
@@ -390,6 +399,7 @@ const FeaturedNewsCard: FC<FeaturedNewsCardType> = (props) => {
 // Subcomponent (News Card)
 // =========================
 type NewsCardType = {
+  id?: string;
   title: string;
   href: string;
   image: {
@@ -400,15 +410,30 @@ type NewsCardType = {
 };
 
 const NewsCard: FC<NewsCardType> = (props) => {
-  const { title, href, image } = props;
+  const { id, title, href, image } = props;
 
   return (
-    <a href={href} className="flex flex-col gap-y-4 group">
-      <div className="relative aspect-[5/4] overflow-hidden rounded-md transition bg-primary-100">
+    <a
+      href={href}
+      className="flex flex-col gap-y-4 group"
+      onClick={(e) => {
+        e.stopPropagation(); // Stop other onClicks from intercepting
+        e.preventDefault(); // Stop default <a> from redirecting.
+        if (document.startViewTransition)
+          document.startViewTransition(async () => {
+            const promise = navigate(href);
+            await promise;
+          });
+      }}
+    >
+      <div
+        className="relative aspect-[5/4] overflow-hidden rounded-md transition bg-primary-100"
+        style={{ viewTransitionName: id ? `newsimg-${id}` : undefined }}
+      >
         <img
           src={mediaUrl(image.url)}
           alt={image.alt ?? title}
-          className="object-cover group-hover:scale-105 transition w-full h-full"
+          className="object-cover object-center group-hover:scale-105 transition w-full h-full"
         />
       </div>
       <div>

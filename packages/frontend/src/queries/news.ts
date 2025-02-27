@@ -94,7 +94,7 @@ export const NewsPageBySlugDocument = graphql(`
       where: {
         slug: { equals: $slug }
         # Don't show draft articles.
-        status: { equals: published }
+        # status: { equals: published }
       }
     ) {
       docs {

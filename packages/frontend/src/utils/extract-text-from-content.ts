@@ -17,7 +17,7 @@ type Node = {
  * Utility for extracting text from content in order to get the
  * number of words later.
  */
-export function extractTextFromContent(content: { root: Node }): string[] {
+export function extractTextFromContent(content: { root: Node }): string {
   const texts: string[] = [];
 
   function extractText(node: Node): void {
@@ -31,5 +31,5 @@ export function extractTextFromContent(content: { root: Node }): string[] {
 
   extractText(content.root);
 
-  return texts;
+  return texts?.join("");
 }

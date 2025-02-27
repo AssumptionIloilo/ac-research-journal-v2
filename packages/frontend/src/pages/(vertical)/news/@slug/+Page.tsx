@@ -1,76 +1,22 @@
-// import { useQuery } from 'urql';
-// import { graphql } from '@/gql';
-// import { AllNewsSlugsDocument, NewsPageBySlugDocument } from '@/gql/graphql';
-// import { client, ssrCache } from '@/lib/urqlClient';
-
-// import { RichText } from '@/components/RichText'; // REPLACE WITH TAILWIND PROSE
+import { RichText } from "@/components/rich-text"; // REPLACE WITH TAILWIND PROSE
 import { NewsPageBySlugDocument } from "@/queries/news";
 import { container } from "@/styles/variants";
 import { formatDate } from "@/utils/format-date";
 import getTitle from "@/utils/get-title";
 import { mediaUrl } from "@/utils/media-url";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "urql";
 import { useMetadata } from "vike-metadata-react";
-import { useData } from "vike-react/useData";
 import { usePageContext } from "vike-react/usePageContext";
-import { Data } from "./+data";
 
-// =============================================================================
-// Server-Side Calls from the Page.
-// =============================================================================
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const { data } = await client
-//     .query(AllNewsSlugsDocument, {}) // no need for request-policy, this only gets called once.
-//     .toPromise();
-
-//   const paths: GetStaticPathsResult['paths'] = [];
-
-//   data?.allNews?.docs?.forEach((newsItem) => {
-//     if (!newsItem?.slug) return;
-
-//     paths.push({
-//       params: {
-//         slug: newsItem.slug,
-//       },
-//     });
-//   });
-
-//   return {
-//     paths: paths,
-//     fallback: true,
-//   };
-// };
-
-// export async function getStaticProps() {
-//   const { slug } = ctx.params as { slug: string };
-
-//   await client
-//     .query(
-//       NewsPageBySlugDocument,
-//       { slug: slug },
-//       { requestPolicy: 'network-only' },
-//     )
-//     .toPromise();
-
-//   return {
-//     props: { slug, urqlState: ssrCache.extractData() },
-//     revalidate: 600,
-//   };
-// }
+import { publicConfig } from "@/config.public";
+import { ready, subscribe, unsubscribe } from "@payloadcms/live-preview";
 
 // =============================================================================
 // News Page (For Querying & Hydrating)
 // =============================================================================
 export default function NewsPage() {
-  const pageData = useData<Data>();
-  const { routeParams } = usePageContext();
-
-  useMetadata({
-    title: getTitle(""),
-    openGraph: {
-      images: [{ url: "https://example.com/og-image.png" }],
-    },
-  });
+  const { routeParams, urlPathname } = usePageContext();
 
   const [{ data }] = useQuery({
     query: NewsPageBySlugDocument,
@@ -79,7 +25,41 @@ export default function NewsPage() {
     },
   });
 
-  const newsArticle = data?.allNews?.docs?.at(0);
+  const _newsArticle = data?.allNews?.docs?.at(0);
+  // Clientside State.
+  const [newsArticle, setNewsArticle] = useState(_newsArticle);
+  const hasSentReadyMessage = useRef<boolean>(false);
+
+  useMetadata({
+    title: getTitle(newsArticle?.title),
+    openGraph: {
+      images: [{ url: "https://example.com/og-image.png" }],
+    },
+  });
+
+  useEffect(() => {
+    const subscription = subscribe({
+      serverURL: publicConfig.CMS_ENDPOINT,
+      callback: (_data) => {
+        setNewsArticle(_data);
+      },
+      initialData: newsArticle,
+    });
+
+    // Once subscribed, send a `ready` message back up to the Admin Panel
+    // This will indicate that the front-end is ready to receive messages
+    if (!hasSentReadyMessage.current) {
+      hasSentReadyMessage.current = true;
+
+      ready({
+        serverURL: publicConfig.CMS_ENDPOINT,
+      });
+    }
+
+    return () => {
+      unsubscribe(subscription);
+    };
+  }, []);
 
   return (
     <div className={container({ class: "pt-10 pb-20 gap-y-12" })}>
@@ -103,24 +83,34 @@ export default function NewsPage() {
             </span>
           </div>
         </div>
+
         <div
           className="relative h-80 w-full bg-primary-50 rounded-md overflow-hidden"
           style={{
-            backgroundImage: `url('${mediaUrl(newsArticle?.featureImage?.url)}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            viewTransitionName: `newsimg-${newsArticle?.id}`,
           }}
         >
           <img
-            alt={newsArticle?.featureImage?.alt}
+            className="w-full h-full object-cover absolute blur-md scale-110"
             src={mediaUrl(newsArticle?.featureImage?.url)}
-            className="object-cover"
+            alt={newsArticle?.featureImage?.alt ?? ""}
           />
+          <img
+            aria-hidden
+            className="pointer-events-none select-none relative w-full h-full object-cover md:object-contain group-hover:scale-105 transition object-center"
+            src={mediaUrl(newsArticle?.featureImage?.url)}
+            alt={newsArticle?.featureImage?.alt ?? ""}
+          />
+          {/* <img
+            alt={newsArticle?.featureImage?.alt ?? ""}
+            src={mediaUrl(newsArticle?.featureImage?.url)}
+            className="object-cover object-center"
+          /> */}
         </div>
       </header>
 
       <div className="max-w-4xl mx-auto w-full prose">
-        {/* <RichText content={newsArticle?.content} /> */}
+        <RichText data={newsArticle?.content} />
       </div>
     </div>
   );
