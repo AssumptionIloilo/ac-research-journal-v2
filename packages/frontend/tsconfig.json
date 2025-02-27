@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "module": "ESNext",
+    "noEmit": true,
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": [
+      "@types/bun", // Remove when Node
+      "vite-plugin-svgr/client",
+      "react",
+      "vite/client"
+    ],
+    "jsx": "react-jsx",
+    "plugins": [
+      {
+        "name": "gql.tada/ts-plugin",
+        "schema": "http://localhost:8080/api/graphql", // Generate from URL, much faster, almost zero-config, but you have to run the server.
+        // "schema": "../cms/schema.graphql", // Generate from local file, quicker gen, but extra step: You need to generate schema on cms.
+        "tadaOutputLocation": "./src/graphql-env.d.ts"
+      }
+    ]
+  },
+  "exclude": ["dist"]
+}
