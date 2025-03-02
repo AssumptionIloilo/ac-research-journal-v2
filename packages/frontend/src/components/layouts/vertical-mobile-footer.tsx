@@ -52,7 +52,7 @@ const VerticalMobileFooter: FC<VerticalMobileFooterProps> = (_props) => {
         </ul>
 
         <a href={pageRoutes.archive} className={button({ class: "hidden md:block z-10" })}>
-          Read Archives
+          Transformateur
         </a>
       </div>
     </nav>

@@ -10,6 +10,8 @@ import { GetArchivesDocument } from "@/queries/archive";
 
 // import { client, ssrCache } from "@/lib/urqlClient";
 // import { NextPageWithLayout } from "@/pages/_app";
+import { useArchiveAsideContext } from "@/components/layouts/archive-aside/archive-aside-context";
+import { OpenCloseButton } from "@/components/open-close-button";
 import { extractTextFromContent } from "@/utils/extract-text-from-content";
 import getTitle from "@/utils/get-title";
 import { mediaUrl } from "@/utils/media-url";
@@ -19,32 +21,12 @@ import { useMetadata } from "vike-metadata-react";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
 
-// export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-//   const params = ctx?.params as { page?: number; limit?: number } | undefined;
-
-//   const { data } = await client
-//     .query(
-//       GetArchivesDocument,
-//       { limit: params?.limit, page: params?.page },
-//       { requestPolicy: "network-only" }
-//     )
-//     .toPromise();
-
-//   return {
-//     props: {
-//       pageInfo: {
-//         limit: params?.limit ?? null,
-//         page: params?.page ?? null,
-//       },
-//       urqlState: ssrCache.extractData(),
-//     },
-//   };
-// }
-
 export default function ArchiveOverviewPage() {
   useMetadata({
-    title: getTitle("Archive"),
+    title: getTitle("Transformateur"),
   });
+
+  const { collapsed, setCollapsed, isCollapsible: shouldFloat } = useArchiveAsideContext();
 
   const { urlParsed } = usePageContext();
   const categorySearch = urlParsed.search["category"];
@@ -64,8 +46,18 @@ export default function ArchiveOverviewPage() {
   const archives = data?.Archives?.docs;
 
   return (
-    <div className="flex-1 pt-16 pb-16 px-9 bg-[#EDF1FD]">
-      <h1 className="font-medium text-3xl text-dark-600 mb-7">Archives</h1>
+    <div
+      className="flex-1 pt-16 pb-16 px-9 bg-[#EDF1FD]"
+      style={{
+        backgroundImage: `url('https://arc.net/noise-light.png')`,
+        backgroundRepeat: "repeat",
+      }}
+    >
+      {shouldFloat && <OpenCloseButton onClick={() => setCollapsed(false)} points="right" />}
+      <h1 className="font-medium text-3xl text-dark-600 mb-2">Transformateur</h1>
+      <p className="mb-5">
+        A Research Journal by Assumption Iloilo 18 General Luna St., Iloilo City, Philippines 5000
+      </p>
       <div className="flex gap-10 flex-wrap">
         {(archives?.length ?? 0) <= 0 && (
           <p>{`😔 No archives found${searchExists ? " based on your search filters" : ""}.`}</p>

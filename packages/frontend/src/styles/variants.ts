@@ -4,6 +4,7 @@ import { tv } from "tailwind-variants";
 
 /** Tailwind Variants for Default Button. */
 export const button = tv({
+  base: "active:scale-95 transition",
   variants: {
     size: {
       lg: "px-4 py-2",

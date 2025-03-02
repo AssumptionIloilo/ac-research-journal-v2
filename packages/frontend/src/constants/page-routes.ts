@@ -44,7 +44,7 @@ export const navLinks: Array<{
     activeIcon: "icon-park-solid:guide-board",
   },
   {
-    label: "Archive",
+    label: "Transformateur",
     url: pageRoutes.archive,
     icon: "majesticons:note-text-line",
     activeIcon: "majesticons:note-text",

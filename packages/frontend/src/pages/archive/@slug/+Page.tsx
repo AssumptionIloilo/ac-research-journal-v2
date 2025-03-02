@@ -1,5 +1,4 @@
 import { FC, memo, useCallback, useEffect, useId, useMemo, useState } from "react";
-import toast from "react-hot-toast";
 import HTMLFlipBook from "react-pageflip";
 import { Document, Page } from "react-pdf";
 import { OnDocumentLoadSuccess } from "react-pdf/dist/cjs/shared/types.js";
@@ -332,7 +331,7 @@ export default function ArchivePage() {
             <div>
               <RichText data={volume?.about} />
             </div>
-            <a
+            {/* <a
               href={encodeURIComponent(mediaUrl(volume?.pdf?.url) ?? "404") ?? "404"}
               target="_blank"
               download={volume?.title}
@@ -366,7 +365,7 @@ export default function ArchivePage() {
                 className="relative top-[1px] flex-shrink-0"
               />
               <span className="truncate">Download Volume</span>
-            </a>
+            </a> */}
           </div>
         </section>
       </div>

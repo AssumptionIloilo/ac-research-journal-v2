@@ -5,6 +5,7 @@ import useIsOnTop from "@/hooks/use-is-on-top";
 import { button, container } from "@/styles/variants";
 import { cn } from "@/utils/cn";
 
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { usePageContext } from "vike-react/usePageContext";
 import Logo from "../logo";
 
@@ -79,8 +80,12 @@ const VerticalNav: FC<VerticalNavProps> = (props) => {
           })}
         </ul>
 
-        <a href={pageRoutes.archive} className={button({ class: "hidden md:block z-10" })}>
-          Read Archives
+        <a
+          href={pageRoutes.archive}
+          className={button({ class: "hidden md:flex z-10 items-center gap-x-2" })}
+        >
+          <span>Transformateur</span>
+          <Icon icon="majesticons:note-text-line" />
         </a>
       </div>
     </nav>

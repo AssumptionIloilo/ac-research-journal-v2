@@ -13,14 +13,13 @@ import { useQuery } from "urql";
 import { IconChevronLeft } from "@/assets/icons";
 import { Icon } from "@iconify/react";
 import Logo from "../logo";
+import { OpenCloseButton } from "../open-close-button";
+import { useArchiveAsideContext } from "./archive-aside/archive-aside-context";
 
-export type ArchiveAsideProps = {
-  collapsed?: boolean;
-};
+export type ArchiveAsideProps = {};
 
 /** The Sidebar for the Archive Page. */
 const ArchiveAside: FC<ArchiveAsideProps> = (props) => {
-  const { collapsed } = props;
   const { urlParsed } = usePageContext();
 
   // ===========================================================================
@@ -28,6 +27,7 @@ const ArchiveAside: FC<ArchiveAsideProps> = (props) => {
   // ===========================================================================
   const [searchValue, setSearchValue] = useState<string>("");
   const [hovered, setHovered] = useState<string | null>(null);
+  const { collapsed, setCollapsed, isCollapsible } = useArchiveAsideContext();
 
   // ===========================================================================
   // Queries
@@ -80,12 +80,25 @@ const ArchiveAside: FC<ArchiveAsideProps> = (props) => {
 
   return (
     <aside
-      className={cn("transition-[width] overflow-hidden duration-300", collapsed ? "w-0" : "w-96")}
+      className={cn(
+        "transition-[width] overflow-hidden duration-300",
+        isCollapsible && "absolute z-20 h-screen",
+        collapsed ? "w-0" : "w-96"
+      )}
     >
       <div className="bg-white p-16 flex flex-col w-96 flex-1 h-full">
-        <a href={pageRoutes.home} className="text-xs mb-4 flex items-center text-neutral-500">
-          <IconChevronLeft className="w-4 h-4" /> Home
-        </a>
+        <div className="flex justify-between items-center mb-4">
+          <a href={pageRoutes.home} className="text-xs  flex items-center text-neutral-500">
+            <IconChevronLeft className="w-4 h-4" /> <span>Back to AC Publications</span>
+          </a>
+          {isCollapsible && (
+            <OpenCloseButton
+              onClick={() => setCollapsed((prev) => !prev)}
+              points={!collapsed ? "left" : "right"}
+            />
+          )}
+        </div>
+
         <Logo color="#2E2FA5" />
         <div className="h-10" />
         <div className="flex items-center gap-x-2 border-b primary-100 py-2">

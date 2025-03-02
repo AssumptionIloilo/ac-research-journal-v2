@@ -10,6 +10,8 @@ import { container } from "@/styles/variants";
 import { cn } from "@/utils/cn";
 import { Icon } from "@iconify/react";
 
+import { GetGuidelinesDocument } from "@/queries/guide";
+import { useQuery } from "urql";
 import { usePageContext } from "vike-react/usePageContext";
 import Sider from "../sider";
 
@@ -38,13 +40,12 @@ import Sider from "../sider";
 type GuideLayoutProps = {} & PropsWithChildren;
 
 const GuideLayout: FC<GuideLayoutProps> = (props) => {
-  // const [{ data: guidelinesData }] = useQuery({
-  //   query: GetGuidelinesDocument,
-  //   variables: {
-  //     limit: 0,
-  //   },
-  // });
-  const guidelinesData: any = null;
+  const [{ data: guidelinesData }] = useQuery({
+    query: GetGuidelinesDocument,
+    variables: {
+      limit: 0,
+    },
+  });
 
   const { routeParams } = usePageContext();
   const currentGuidelineSlug = routeParams["slug"] ?? "404";
