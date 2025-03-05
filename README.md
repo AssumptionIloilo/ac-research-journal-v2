@@ -1,52 +1,106 @@
-# 🐇 Solid Hop
+<h1>AC Research Journal Project</h1>
 
-💙 A **minimal** and **unopinionated** Vike + Solid + Hono starter.
+- [Architecture](#architecture)
+- [Prerequisites](#prerequisites)
+- [🛠️ Development](#%F0%9F%9B%A0%EF%B8%8F-development)
+  - [Frontend](#frontend)
+  - [CMS](#cms)
+- [🚀 Deployment](#%F0%9F%9A%80-deployment)
+- [📌 Resource Links](#%F0%9F%93%8C-resource-links)
 
-❤️ We love Vike and Solid, but it might be overwhelming to setup. The goal of this starter is to get you up and running quickly with good defaults without getting in the way of your opinions.
+---
 
-This is more or less what you would get from a starter with `create next-app` or `create svelte` or `create solid`.
+### Architecture
 
-If you want a more opinionated and fully-featured boilerplate instead: http://github.com/blankeos/solid-launch
-
-## Tech Stack:
-
-1. Vike + Hono - For SSR + Your own Server.
-2. SolidJS
-3. Bun (Can swap this with Node easily if you want).
-4. Tools: ESLint, Prettier
-
-## Quick Start
-
-1. Clone
-
-```sh
-git clone https://github.com/blankeos/solid-hop <your-app-name>
-cd <your-app-name>
-rm -rf .git # This is your app. Start the commits fresh :D
+```
+🍃 MongoDB
+   |
+   |
+   |
+☁ Server (Dokploy)
+  - PayloadCMS
+   |  - media/ (stored locally)
+   |
+   |
+  - Frontend
 ```
 
-1. Install
+### Prerequisites
+
+- Bun - Package manager and runtime.
+- Docker - To spin up mongodb quickly.
+
+### 🛠️ Development
+
+#### Frontend
 
 ```sh
+cd packages/frontend
 bun install
-```
-
-3. Run dev server
-
-```sh
+cp .env.example .env # There is documentation on where to get each variable.
 bun dev
 ```
 
-## Building and Deployment
-
-1. Build
+#### CMS
 
 ```sh
-bun run build
+cd packages/cms
+bun install
+cp .env.example .env # There is documentation on where to get each variable.
+docker compose up # If you want to use the local db
+bun dev
 ```
 
-2. Wherever you deploy, just run make sure that this is ran:
+- More Commands
 
-```sh
-bun run preview # Just runs server.ts
-```
+  ```sh
+  bun run generate:graphql # generates schema.graphql
+  bun run db:clone # Clones the prod db to local machine. So you can play around with migrations without affecting prod.
+  bun run media:clone # Not here yet. Clones the prod media to local machine. Might be a long process, not recommended. But if you want the pictures, etc.
+  ```
+
+- Access PayloadCMS Admin on `http://localhost:8080:/admin`. Email and Password (get it from the owners of the site).
+
+### 🚀 Deployment
+
+Currently deployed using Dokploy on a VPS container.
+
+**Here's how to deploy from scratch.**
+
+1. Get a VPS like $7 from Hetzner or anywhere that's good.
+2. Run the installation command from: https://dokploy.com/
+3. Open the Dokploy Web UI from the URL given after installation.
+   `http://<your-vps-ip>:3000` usually here.
+4. You will create an account there the first time.
+5. After creating an account, first, connect **Git Provider** (GitHub).
+
+- Go to Settings > **Git** and press **GitHub** > **Create GitHub App** > ✅ Organization > Write the "AssumptionIloilo"
+  organization name. > Create.
+- Press the "⬇️" icon to "Install" the Dokploy App in that organization.
+
+6. Create the Project.
+
+- Go to **Projects** > **[Create a Project]** > **Go to that Project**
+
+7. Create two services: (1) Frontend and (2) CMS.
+
+- **[Create Service]** > **Application** > Call it "Frontend"
+
+  - Connect the Git Repo: Click on **General** > Provider > GitHub > Fill up the form. Use `main` branch, then save.
+  - Set Env Variables: Click on **Environment** and paste the variables there.
+  - Configure Domain: Click on **Domains** and paste the domain. Path: `/`. Port: `3000`. HTTPS `on` with `Let's Encrypt`.
+
+- **[Create Service]** > **Application** > Call it "CMS"
+
+  - Connect the Git Repo: Same steps.
+  - Set Env Variables: Same steps.
+  - Configure Domain: Same steps. Path: `/`. Port: `8080`. HTTPS `on` with `Let's Encrypt`.
+  - Make sure to set the Docker Volumes so that local `media/` folder is mounted and works.
+
+8. All deployed 🎉. It will have Push to Deploy, Rolling Deploys.
+
+### 📌 Resource Links
+
+- [Figma](https://www.figma.com/file/XZNiNLWkCDJqoi37oZqSYo/Assumption-Research-Journal?type=design&node-id=0%3A1&mode=design&t=peGx1eUHzUtoyJK0-1)
+- [payloadcms docs](https://payloadcms.com/docs/getting-started/what-is-payload)
+- [urql docs](https://formidable.com/open-source/urql/docs/)
