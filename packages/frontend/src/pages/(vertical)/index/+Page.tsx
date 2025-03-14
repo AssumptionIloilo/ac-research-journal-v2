@@ -87,7 +87,7 @@ export default function Home(_props: PropsWithChildren) {
         <div className="overflow-hidden absolute h-max -bottom-[160px] md:-bottom-[120px] left-0 right-0 flex bg-white rounded-xl shadow-md max-w-6xl md:w-3/4 md:h-[260px] m-auto mx-4 md:mx-auto z-20">
           <div className="flex-1 flex flex-col items-start justify-center gap-y-2 px-8 md:pl-10 py-8">
             <p className="text-secondary-900 text-[12px] bg-secondary-500 rounded-full px-4 py-1 truncate flex-shrink-0">
-              💜 Newest Publication
+              💜 Newest Publication!
             </p>
             <h2 className="text-dark-800 font-bold text-[18px] md:text-[22px] truncate flex-shrink-0">
               {featuredArchive.title}
@@ -209,7 +209,7 @@ export default function Home(_props: PropsWithChildren) {
                   href={`${pageRoutes.news}/${_news?.slug}`}
                   key={_news?.id}
                   img={mediaUrl(_news?.featureImage?.url)}
-                  text={_news?.title ?? ''}
+                  text={_news?.title ?? ""}
                   date={_news?.publishedDate ?? ""}
                   btnColor={btnColor}
                   bgColor={bgColor}
