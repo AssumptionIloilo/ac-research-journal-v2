@@ -33,6 +33,7 @@
   "dependencies": {
     "@iconify/react": "^5.2.0",
     "@payloadcms/live-preview": "^3.28.1",
+    "@payloadcms/richtext-lexical": "^3.28.1",
     "@tailwindcss/vite": "^4.0.14",
     "@vitejs/plugin-react": "^4.3.4",
     "clsx": "^2.1.1",
