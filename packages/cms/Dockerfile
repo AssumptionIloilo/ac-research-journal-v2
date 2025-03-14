@@ -1,7 +1,7 @@
 # To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.mjs file.
 # From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 
-FROM node:22.12.0-alpine AS base
+FROM oven/bun:alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -9,17 +9,16 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install Bun - Caching is inherently done in Docker through layers.  Changes here will invalidate the cache.
-RUN if [ ! -f /usr/bin/bun ]; then \
-        apk add --no-cache --virtual .bun-build-deps curl tar bash && \
-        curl -fsSL https://bun.sh/install | bash && \
-        apk del --purge .bun-build-deps; \
-    fi
-    
-# Set Bun-related environment variables
-ENV BUN_INSTALL=/root/.bun
-ENV PATH="${BUN_INSTALL}/bin:${PATH}"
+# # Install Bun - Caching is inherently done in Docker through layers.  Changes here will invalidate the cache.
+# RUN if [ ! -f /usr/bin/bun ]; then \
+#         apk add --no-cache --virtual .bun-build-deps curl tar bash && \
+#         curl -fsSL https://bun.sh/install | bash && \
+#         apk del --purge .bun-build-deps; \
+#     fi
 
+# # Set Bun-related environment variables
+# ENV BUN_INSTALL=/root/.bun
+# ENV PATH="${BUN_INSTALL}/bin:${PATH}"
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* bun.lock* ./
