@@ -340,8 +340,7 @@ const FeaturedNewsCard: FC<FeaturedNewsCardType> = (props) => {
           e.preventDefault(); // Stop default <a> from redirecting.
           if (document.startViewTransition)
             document.startViewTransition(async () => {
-              const promise = navigate(href);
-              await promise;
+              await navigate(href);
             });
         }}
         // style={{ viewTransitionName: `newsimg-${id}` }}
@@ -421,8 +420,7 @@ const NewsCard: FC<NewsCardType> = (props) => {
         e.preventDefault(); // Stop default <a> from redirecting.
         if (document.startViewTransition)
           document.startViewTransition(async () => {
-            const promise = navigate(href);
-            await promise;
+            await navigate(href);
           });
       }}
     >

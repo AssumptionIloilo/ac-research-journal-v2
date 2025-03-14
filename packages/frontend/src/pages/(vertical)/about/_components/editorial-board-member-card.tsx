@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 type EditorialBoardCardProps = {
-  profileImageURL: string;
+  profileImageURL?: string;
   name: string;
   subtitle: string;
 };

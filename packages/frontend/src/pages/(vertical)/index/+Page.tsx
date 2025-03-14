@@ -138,7 +138,7 @@ export default function Home(_props: PropsWithChildren) {
         {(!homeNewsData || homeNewsData?.news?.docs?.length === 0) && (
           <p className="text-center">😭 No news stories found.</p>
         )}
-        <div className="flex flex-col gap-y-6 md:flex-row w-[90%] md:w-3/4 md:gap-x-8 max-w-6xl mx-auto">
+        <div className="flex flex-col gap-y-6 lg:flex-row w-[90%] md:w-3/4 md:gap-x-8 max-w-6xl mx-auto">
           {/* Featured News Card */}
           {featuredNews && (
             <a
@@ -158,7 +158,7 @@ export default function Home(_props: PropsWithChildren) {
                 <div className="absolute inset-0">
                   <img
                     src={mediaUrl(featuredNews?.featureImage?.url)}
-                    alt={featuredNews?.featureImage?.alt}
+                    alt={featuredNews?.featureImage?.alt ?? ""}
                     className="object-cover bg-secondary-300 w-full h-full"
                   />
                 </div>
@@ -209,7 +209,7 @@ export default function Home(_props: PropsWithChildren) {
                   href={`${pageRoutes.news}/${_news?.slug}`}
                   key={_news?.id}
                   img={mediaUrl(_news?.featureImage?.url)}
-                  text={_news?.title}
+                  text={_news?.title ?? ''}
                   date={_news?.publishedDate ?? ""}
                   btnColor={btnColor}
                   bgColor={bgColor}
@@ -222,10 +222,3 @@ export default function Home(_props: PropsWithChildren) {
     </>
   );
 }
-
-// Home.getLayout = (page) => (
-//   <VerticalLayout navPosition="fixed" navVariant="inverted">
-//     {page}
-//   </VerticalLayout>
-// );
-// export default Home;

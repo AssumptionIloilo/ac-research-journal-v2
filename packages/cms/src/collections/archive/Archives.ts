@@ -4,6 +4,7 @@ import { makeDescriptionWithHref } from '@/components/descriptions/description-w
 import { makeSlugField } from '@/components/slug-field/slug-field.make'
 import formatSlug from '@/utils/format-slug'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { SlateToLexicalFeature } from '@payloadcms/richtext-lexical/migrate'
 
 const Archives: CollectionConfig = {
   slug: 'archives',
@@ -54,7 +55,9 @@ const Archives: CollectionConfig = {
         description: 'A longer description about what this archived item is about.',
       },
       // editor: lexicalEditor({
-      //   features: ({ defaultFeatures }) => [...defaultFeatures],
+      //   features: ({ defaultFeatures }) => [...defaultFeatures,
+      //     SlateToLexicalFeature({ disableHooks: true }),
+      //   ],
       // }),
     },
     {

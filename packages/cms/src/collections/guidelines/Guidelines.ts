@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import formatSlug from '@/utils/format-slug'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { SlateToLexicalFeature } from '@payloadcms/richtext-lexical/migrate'
 
 const Guidelines: CollectionConfig = {
   slug: 'guidelines',
@@ -31,7 +32,9 @@ const Guidelines: CollectionConfig = {
         description: 'Write anything about your guide.',
       },
       // editor: lexicalEditor({
-      //   features: ({ defaultFeatures }) => [...defaultFeatures],
+      //   features: ({ defaultFeatures }) => [...defaultFeatures,
+      //     SlateToLexicalFeature({ disableHooks: true }),
+      //   ],
       // }),
     },
     {

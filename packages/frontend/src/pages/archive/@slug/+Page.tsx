@@ -3,11 +3,6 @@ import HTMLFlipBook from "react-pageflip";
 import { Document, Page } from "react-pdf";
 import { OnDocumentLoadSuccess } from "react-pdf/dist/cjs/shared/types.js";
 import Select, { type SingleValue } from "react-select";
-// import { useQuery } from "urql";
-
-// import { RichText } from "@/components/RichText"; // REPLACE WITH TAILWIND PROSE
-// import { GetArchiveBySlugDocument, GetArchiveBySlugQuery } from "@/gql/graphql";
-// import { client, ssrCache } from "@/lib/urqlClient";
 
 import { useMediaQueryClient } from "@/hooks/use-media-query";
 import useMounted from "@/hooks/use-mounted";
@@ -288,8 +283,7 @@ export default function ArchivePage() {
             e.preventDefault(); // Stop default <a> from redirecting.
             if (document.startViewTransition)
               document.startViewTransition(async () => {
-                const promise = navigate(pageRoutes.archive);
-                await promise;
+                await navigate(pageRoutes.archive);
               });
             // // 👇 Prevents opening the link on click (middle-click will work)
             // // Which is what we want.

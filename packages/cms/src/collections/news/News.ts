@@ -7,6 +7,8 @@ import isAdminOrCurrentUser from '@/utils/access-control/is-admin-or-current-use
 import { extractTextFromContent } from '@/utils/extract-text-from-content'
 import formatSlug from '@/utils/format-slug'
 import { readingTime } from 'reading-time-estimator'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { SlateToLexicalFeature } from '@payloadcms/richtext-lexical/migrate'
 
 const News: CollectionConfig = {
   slug: 'news',
@@ -89,7 +91,9 @@ const News: CollectionConfig = {
         description: 'Write anything about your news/story article.',
       },
       // editor: lexicalEditor({
-      //   features: ({ defaultFeatures }) => [...defaultFeatures],
+      //   features: ({ defaultFeatures }) => [...defaultFeatures,
+      //     SlateToLexicalFeature({ disableHooks: true }),
+      //   ],
       // }),
     },
     {

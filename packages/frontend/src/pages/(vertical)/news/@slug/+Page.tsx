@@ -10,6 +10,7 @@ import { useMetadata } from "vike-metadata-react";
 import { usePageContext } from "vike-react/usePageContext";
 
 import { publicConfig } from "@/config.public";
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { ready, subscribe, unsubscribe } from "@payloadcms/live-preview";
 
 // =============================================================================
@@ -62,7 +63,15 @@ export default function NewsPage() {
   }, []);
 
   return (
-    <div className={container({ class: "pt-10 pb-20 gap-y-12" })}>
+    <div className={container({ class: "pt-10 pb-20 gap-y-12 relative" })}>
+      <button
+        onClick={() => window.history.back()}
+        className="mb-8 flex items-center gap-2 text-dark-400 hover:text-dark-600 transition absolute top-10 left-8"
+      >
+        <Icon icon="uil:arrow-left" />
+        Back
+      </button>
+
       <header className="flex flex-col gap-y-8">
         <h1 className="font-bold text-2xl max-w-lg mx-auto text-center">{newsArticle?.title}</h1>
         <div className="flex gap-x-2 justify-center">

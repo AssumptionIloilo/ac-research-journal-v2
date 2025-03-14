@@ -1,5 +1,5 @@
 // Hono
-// import devServer from "@hono/vite-dev-server";
+import devServer from "@hono/vite-dev-server";
 
 // Vike
 import vike from "vike/plugin";
@@ -19,25 +19,28 @@ import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
   plugins: [
-    // devServer({
-    //   entry: "./src/server/server.ts",
+    devServer({
+      entry: "./src/server/server.ts",
+      exclude: [
+        /^\/@.+$/,
+        /.*\.(ts|tsx|vue)($|\?)/,
+        /.*\.(s?css|less)($|\?)/,
+        /^\/favicon\.ico$/,
+        /.*\.(svg|png)($|\?)/,
+        /^\/(public|assets|static)\/.+/,
+        /^\/node_modules\/.*/,
+      ],
 
-    //   exclude: [
-    //     /^\/@.+$/,
-    //     /.*\.(ts|tsx|vue)($|\?)/,
-    //     /.*\.(s?css|less)($|\?)/,
-    //     /^\/favicon\.ico$/,
-    //     /.*\.(svg|png)($|\?)/,
-    //     /^\/(public|assets|static)\/.+/,
-    //     /^\/node_modules\/.*/,
-    //   ],
-
-    //   injectClientScript: false,
-    // }),
+      injectClientScript: false,
+    }),
     tailwindcss(),
     react(),
     svgr(),
-    vike({}),
+    vike({
+      prerender: {
+        partial: true,
+      },
+    }),
   ],
   server: {
     port: 3000,

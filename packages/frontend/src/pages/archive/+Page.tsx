@@ -8,8 +8,6 @@ import useArchiveWasPrevious from "./_hooks/use-archive-was-previous";
 import { pageRoutes } from "@/constants/page-routes";
 import { GetArchivesDocument } from "@/queries/archive";
 
-// import { client, ssrCache } from "@/lib/urqlClient";
-// import { NextPageWithLayout } from "@/pages/_app";
 import { useArchiveAsideContext } from "@/components/layouts/archive-aside/archive-aside-context";
 import { OpenCloseButton } from "@/components/open-close-button";
 import { extractTextFromContent } from "@/utils/extract-text-from-content";
@@ -26,7 +24,7 @@ export default function ArchiveOverviewPage() {
     title: getTitle("Transformateur"),
   });
 
-  const { collapsed, setCollapsed, isCollapsible: shouldFloat } = useArchiveAsideContext();
+  const { setCollapsed, isCollapsible: shouldFloat } = useArchiveAsideContext();
 
   const { urlParsed } = usePageContext();
   const categorySearch = urlParsed.search["category"];
@@ -55,12 +53,12 @@ export default function ArchiveOverviewPage() {
     >
       {shouldFloat && <OpenCloseButton onClick={() => setCollapsed(false)} points="right" />}
       <h1 className="font-medium text-3xl text-dark-600 mb-2">Transformateur</h1>
-      <p className="mb-5">
+      <p className="mb-5 text-sm text-primary-500">
         A Research Journal by Assumption Iloilo 18 General Luna St., Iloilo City, Philippines 5000
       </p>
       <div className="flex gap-10 flex-wrap">
         {(archives?.length ?? 0) <= 0 && (
-          <p>{`😔 No archives found${searchExists ? " based on your search filters" : ""}.`}</p>
+          <p className="text-sm text-neutral-500">{`😔 No archives found${searchExists ? " based on your search filters" : ""}.`}</p>
         )}
         {archives?.map((volume) => (
           <VolumeCard
@@ -99,11 +97,10 @@ const VolumeCard = (props: PropsWithChildren & VolumeCardProps) => {
       onClick={(e) => {
         e.stopPropagation(); // Stop other onClicks from intercepting.
         e.preventDefault(); // Stop default <a> from redirecting.
-        document.startViewTransition(async () => {
-          const promise = navigate(href);
-          await promise;
-        });
         saveArchiveWasPrevious();
+        document.startViewTransition(async () => {
+          await navigate(href);
+        });
       }}
     >
       <div className="-inset-3 bg-primary-200/10 absolute rounded-lg group-hover:opacity-100 opacity-0 transition" />
