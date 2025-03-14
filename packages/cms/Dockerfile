@@ -15,6 +15,11 @@ RUN if [ ! -f /usr/bin/bun ]; then \
         curl -fsSL https://bun.sh/install | bash && \
         apk del --purge .bun-build-deps; \
     fi
+    
+# Set Bun-related environment variables
+ENV BUN_INSTALL=/root/.bun
+ENV PATH="${BUN_INSTALL}/bin:${PATH}"
+
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* bun.lock* ./
