@@ -86,13 +86,19 @@ Currently deployed using Dokploy on a VPS container.
 
 - **[Create Service]** > **Application** > Call it "Frontend"
 
-  - Connect the Git Repo: Click on **General** > Provider > GitHub > Fill up the form. Use `main` branch, then save.
+  - Connect the Git Repo: Click on **General** > Provider > GitHub > Fill up the form.
+    - Branch `main`
+    - Build Type `Dockerfile`.
+    - Docker File Path: `packages/frontend/Dockerfile`
   - Set Env Variables: Click on **Environment** and paste the variables there.
   - Configure Domain: Click on **Domains** and paste the domain. Path: `/`. Port: `3000`. HTTPS `on` with `Let's Encrypt`.
 
 - **[Create Service]** > **Application** > Call it "CMS"
 
   - Connect the Git Repo: Same steps.
+    - Branch `main`
+    - Build Type `Dockerfile`.
+    - Docker File Path: `packages/cms/Dockerfile`
   - Set Env Variables: Same steps.
   - Configure Domain: Same steps. Path: `/`. Port: `8080`. HTTPS `on` with `Let's Encrypt`.
   - Make sure to set the Docker Volumes so that local `media/` folder is mounted and works.
