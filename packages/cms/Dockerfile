@@ -1,7 +1,11 @@
 # To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.mjs file.
 # From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
-
+FROM node:20-alpine AS node_20
 FROM oven/bun:alpine AS base
+COPY --from=node_20 /usr/local /usr/local
+
+# Install Node.js 20
+RUN apk add --no-cache nodejs npm
 
 # Install dependencies only when needed
 FROM base AS deps
